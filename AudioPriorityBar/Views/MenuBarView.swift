@@ -38,10 +38,12 @@ struct MenuBarView: View {
                             currentDeviceId: audioManager.currentOutputId,
                             onMove: audioManager.moveSpeakerDevice,
                             onSelect: { device in
-                                if !audioManager.isCustomMode {
+                                if audioManager.isCustomMode {
+                                    audioManager.setOutputDevice(device)
+                                } else {
                                     audioManager.setMode(.speaker)
+                                    audioManager.promoteSpeakerDevice(device)
                                 }
-                                audioManager.setOutputDevice(device)
                             },
                             onHide: { audioManager.hideDevice($0, category: .speaker) },
                             onUnhide: { audioManager.unhideDevice($0, category: .speaker) },
@@ -60,10 +62,12 @@ struct MenuBarView: View {
                             currentDeviceId: audioManager.currentOutputId,
                             onMove: audioManager.moveHeadphoneDevice,
                             onSelect: { device in
-                                if !audioManager.isCustomMode {
+                                if audioManager.isCustomMode {
+                                    audioManager.setOutputDevice(device)
+                                } else {
                                     audioManager.setMode(.headphone)
+                                    audioManager.promoteHeadphoneDevice(device)
                                 }
-                                audioManager.setOutputDevice(device)
                             },
                             onHide: { audioManager.hideDevice($0, category: .headphone) },
                             onUnhide: { audioManager.unhideDevice($0, category: .headphone) },
@@ -80,7 +84,13 @@ struct MenuBarView: View {
                         devices: audioManager.inputDevices,
                         currentDeviceId: audioManager.currentInputId,
                         onMove: audioManager.moveInputDevice,
-                        onSelect: audioManager.setInputDevice,
+                        onSelect: { device in
+                            if audioManager.isCustomMode {
+                                audioManager.setInputDevice(device)
+                            } else {
+                                audioManager.promoteInputDevice(device)
+                            }
+                        },
                         onHide: { audioManager.hideDevice($0, category: nil) },
                         onUnhide: { audioManager.unhideDevice($0, category: nil) },
                         category: nil,

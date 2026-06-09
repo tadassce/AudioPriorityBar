@@ -60,7 +60,8 @@ Check the [Releases](https://github.com/tobi/AudioPriorityBar/releases) page for
 
 ### Managing Priorities
 
-- **Click a device**: Moves it to #1 priority (in normal mode) or just selects it (in custom mode)
+- **Click a device** (normal mode): Promotes it to #1 priority and switches to it
+- **Click a device** (custom mode): Selects it as active without changing the priority order
 - **Drag devices**: Reorder by dragging the handle
 - **Up/Down arrows**: Fine-tune order on hover
 

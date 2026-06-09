@@ -377,6 +377,21 @@ class AudioManager: ObservableObject {
         }
     }
 
+    func promoteInputDevice(_ device: AudioDevice) {
+        guard let index = inputDevices.firstIndex(of: device) else { return }
+        moveInputDevice(from: IndexSet(integer: index), to: 0)
+    }
+
+    func promoteSpeakerDevice(_ device: AudioDevice) {
+        guard let index = speakerDevices.firstIndex(of: device) else { return }
+        moveSpeakerDevice(from: IndexSet(integer: index), to: 0)
+    }
+
+    func promoteHeadphoneDevice(_ device: AudioDevice) {
+        guard let index = headphoneDevices.firstIndex(of: device) else { return }
+        moveHeadphoneDevice(from: IndexSet(integer: index), to: 0)
+    }
+
     func setInputDevice(_ device: AudioDevice) {
         applyInputDevice(device)
     }

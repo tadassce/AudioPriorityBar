@@ -43,6 +43,49 @@ class PriorityManager {
     private let hiddenDevicesKey = "hiddenDevices"
     private let knownDevicesKey = "knownDevices"
 
+    // MARK: - Legacy Preferences Migration
+
+    private let legacyDomainName = "com.example.AudioPriorityBar"
+    private let didMigrateLegacyKey = "didMigrateLegacyDefaults_v1"
+
+    init() {
+        migrateLegacyDefaultsIfNeeded()
+    }
+
+    private func migrateLegacyDefaultsIfNeeded() {
+        guard !defaults.bool(forKey: didMigrateLegacyKey) else { return }
+
+        if Bundle.main.bundleIdentifier == legacyDomainName {
+            defaults.set(true, forKey: didMigrateLegacyKey)
+            return
+        }
+
+        guard let legacy = UserDefaults(suiteName: legacyDomainName) else { return }
+
+        let keysToMigrate = [
+            inputPrioritiesKey,
+            speakerPrioritiesKey,
+            headphonePrioritiesKey,
+            deviceCategoriesKey,
+            currentModeKey,
+            customModeKey,
+            hiddenDevicesKey,
+            knownDevicesKey,
+            neverUseKey,
+            hiddenMicsKey,
+            hiddenSpeakersKey,
+            hiddenHeadphonesKey
+        ]
+
+        for key in keysToMigrate {
+            guard defaults.object(forKey: key) == nil,
+                  let value = legacy.object(forKey: key) else { continue }
+            defaults.set(value, forKey: key)
+        }
+
+        defaults.set(true, forKey: didMigrateLegacyKey)
+    }
+
     // MARK: - Known Devices (Persistent Memory)
 
     func getKnownDevices() -> [StoredDevice] {

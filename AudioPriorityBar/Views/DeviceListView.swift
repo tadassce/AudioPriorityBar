@@ -364,7 +364,7 @@ struct DraggableDeviceRow: View {
         .animation(.easeInOut(duration: 0.1), value: isDropTargetBelow)
         .contentShape(Rectangle())
         .onTapGesture {
-            if !isDisconnected && audioManager.isCustomMode {
+            if !isDisconnected {
                 onSelect()
             }
         }
